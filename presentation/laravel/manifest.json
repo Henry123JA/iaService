@@ -1,0 +1,17 @@
+[
+  {
+    "fuente": "Show.vue",
+    "destino": "resources/js/Pages/Riesgo/Show.vue",
+    "sha256_original": "10f31b83dfc4c0fdc7bfec1b6793ae6e98a5e82eae5cd1e9955897f8ab897e4f"
+  },
+  {
+    "fuente": "Index.vue",
+    "destino": "resources/js/Pages/Riesgo/Index.vue",
+    "sha256_original": "c17a0e5ee7c4d50da076833f756e532040a6ba24be349ebf821fadf2f6378aba"
+  },
+  {
+    "fuente": "explicacion.js",
+    "destino": "resources/js/Pages/Riesgo/explicacion.js",
+    "sha256_original": "89677ff6be6f4ab61bb8e9023a319192cdda30f93f12f3be3a00db89a6b93503"
+  }
+]

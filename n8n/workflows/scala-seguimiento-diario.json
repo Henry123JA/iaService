@@ -1,0 +1,219 @@
+{
+  "updatedAt": "2026-11-10T19:36:15.235Z",
+  "createdAt": "2026-11-10T19:36:15.235Z",
+  "id": "ScalaMlDiario2000",
+  "name": "Scala Musical - seguimiento diario 20h",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "manual",
+      "name": "Ejecutar manualmente",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "schedule",
+      "name": "Todos los dias 20h La Paz",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 20 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "dataset",
+      "name": "Consultar Laravel",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        100
+      ],
+      "parameters": {
+        "url": "http://host.docker.internal:8000/api/ml/dataset-alumnos",
+        "options": {
+          "timeout": 15000
+        },
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ScalaLaravelMl01",
+          "name": "Scala Laravel ML - servicio"
+        }
+      }
+    },
+    {
+      "id": "predict",
+      "name": "Predecir en FastAPI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8001/api/v1/predict-batch",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({alumnos: $json.dataset.map(item => ({inscripcion_id: item.inscripcion_id, features: item.features}))}) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000
+    },
+    {
+      "id": "save",
+      "name": "Guardar alertas en Laravel",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        780,
+        100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/api/ml/webhook-alertas",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 30000
+        },
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ScalaLaravelMl01",
+          "name": "Scala Laravel ML - servicio"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Ejecutar manualmente": {
+      "main": [
+        [
+          {
+            "node": "Consultar Laravel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Todos los dias 20h La Paz": {
+      "main": [
+        [
+          {
+            "node": "Consultar Laravel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar Laravel": {
+      "main": [
+        [
+          {
+            "node": "Predecir en FastAPI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Predecir en FastAPI": {
+      "main": [
+        [
+          {
+            "node": "Guardar alertas en Laravel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/La_Paz",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "none",
+    "saveManualExecutions": false,
+    "executionTimeout": 180
+  },
+  "staticData": {
+    "node:Todos los dias 20h La Paz": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "f7f11c92-0912-4020-a622-2a38d7847bd8",
+  "versionCounter": 1,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-11-10T19:36:15.259Z",
+      "createdAt": "2026-11-10T19:36:15.259Z",
+      "role": "workflow:owner",
+      "workflowId": "ScalaMlDiario2000",
+      "projectId": "Wy4Ns84mZ3sNrdYq",
+      "project": {
+        "updatedAt": "2026-11-10T20:03:35.932Z",
+        "createdAt": "2026-11-10T19:35:57.840Z",
+        "id": "Wy4Ns84mZ3sNrdYq",
+        "name": "Henry  Javier Alegria <positronsito1.62@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "c1bf0cf6-6f64-48f4-951c-b6a425983764"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

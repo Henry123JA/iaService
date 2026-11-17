@@ -1,0 +1,37 @@
+[
+  {
+    "fuente": "RiesgoPredictivoService.php",
+    "destino": "app/Services/RiesgoPredictivoService.php",
+    "sha256_original": "d63b2a39734ff22a00dd71f452d310db67428b3b3a19a0b99a21e271e2b9666a"
+  },
+  {
+    "fuente": "RiesgoAcademicoController.php",
+    "destino": "app/Http/Controllers/RiesgoAcademicoController.php",
+    "sha256_original": "93ec86d862ad9507a5bf4efed84b046c04c1c258ee944e8a549af2636dc4715a"
+  },
+  {
+    "fuente": "Show.vue",
+    "destino": "resources/js/Pages/Riesgo/Show.vue",
+    "sha256_original": "7d9204ceb39a8e7650ef9764ebfb6ba54d7f76aaec79b173f7710d2d3fec1e40"
+  },
+  {
+    "fuente": "Index.vue",
+    "destino": "resources/js/Pages/Riesgo/Index.vue",
+    "sha256_original": "c89ca0d675ef5b0f242161cd35b8dc744ed190d6ba3b29f4cc343dc65625cecc"
+  },
+  {
+    "fuente": "explicacion.js",
+    "destino": "resources/js/Pages/Riesgo/explicacion.js",
+    "sha256_original": null
+  },
+  {
+    "fuente": "XaiPersistenciaTest.php",
+    "destino": "tests/Feature/XaiPersistenciaTest.php",
+    "sha256_original": null
+  },
+  {
+    "fuente": "N8nBatchWebhookTest.php",
+    "destino": "tests/Feature/N8nBatchWebhookTest.php",
+    "sha256_original": "2f9e003e412ab8d6eaee507ea0edbd276baa6d45d7ea55b73ba9c809e5eb74a5"
+  }
+]

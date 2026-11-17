@@ -1,0 +1,42 @@
+[
+  {
+    "fuente": "RequireMlServiceToken.php",
+    "destino": "app/Http/Middleware/RequireMlServiceToken.php",
+    "sha256_original": null
+  },
+  {
+    "fuente": "services.php",
+    "destino": "config/services.php",
+    "sha256_original": "32f60839a9e76a90fb9bfc8ab39b6a42f0e77bcdece0a5eb33d9cdc600532d7d"
+  },
+  {
+    "fuente": "web.php",
+    "destino": "routes/web.php",
+    "sha256_original": "6e9dd2074d06e6355b3607c7475d24ab9911fdf07aa2807472d8b16c108114bc"
+  },
+  {
+    "fuente": ".env.example",
+    "destino": ".env.example",
+    "sha256_original": "c5c31fb858263c858acb4acb276ca57757107f24c790a50e1a30304cceccb00b"
+  },
+  {
+    "fuente": "MlEndpointSecurityTest.php",
+    "destino": "tests/Feature/MlEndpointSecurityTest.php",
+    "sha256_original": null
+  },
+  {
+    "fuente": "N8nBatchWebhookTest.php",
+    "destino": "tests/Feature/N8nBatchWebhookTest.php",
+    "sha256_original": "d69ac235cd94a79919de2d9bbabc4be23af0648e0dc50305388be0ac4126592e"
+  },
+  {
+    "fuente": "XaiPersistenciaTest.php",
+    "destino": "tests/Feature/XaiPersistenciaTest.php",
+    "sha256_original": "4a3496e5269d038edff3cfe4f29869ce9887b99649534bbac87834b60c66f620"
+  },
+  {
+    "fuente": "RiesgoPredictivoTest.php",
+    "destino": "tests/Feature/RiesgoPredictivoTest.php",
+    "sha256_original": "1facf211473e10a8a00dd88cb692de1c3ea6dd8798f85ef0e682909bd7116bcd"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "fuente": "RiesgoPredictivoService.php",
+    "destino": "app/Services/RiesgoPredictivoService.php",
+    "sha256_original": "de17a980f60a992d42a70c67aff85fbca83a52ea67dcb1d2801f96e046b7916d"
+  },
+  {
+    "fuente": "services.php",
+    "destino": "config/services.php",
+    "sha256_original": "b99f2407381d56cdaec232e9e9eab4da4c0fdd2a866927e4cab8d14881f77e61"
+  },
+  {
+    "fuente": ".env.example",
+    "destino": ".env.example",
+    "sha256_original": "a527dd22cebd532f74bdca8352dc2e624bdf0655a8c85be88edd35ac44bd13c3"
+  },
+  {
+    "fuente": "FastApiIntegrationTest.php",
+    "destino": "tests/Feature/FastApiIntegrationTest.php",
+    "sha256_original": null
+  }
+]

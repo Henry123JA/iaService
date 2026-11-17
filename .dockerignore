@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+data/
+.git/
+tests/
+presentation/
+permissions/
+security/
+laravel-integration/
+startup/
+

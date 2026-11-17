@@ -1,0 +1,68 @@
+    /** Guarda exclusivamente resultados ML; no inventa scores ni factores locales. */
+    public function procesarResultadosMl(array $resultados): array
+    {
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($resultados) {
+            $ids = [];
+            $omitidas = [];
+            foreach ($resultados as $item) {
+                $inscripcion = Inscripcion::whereKey($item['inscripcion_id'])->lockForUpdate()->first();
+                if (! $inscripcion) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'resultados' => 'La inscripcion indicada no existe.',
+                    ]);
+                }
+                $features = $this->extraerFeatures($inscripcion);
+                $estado = $item['estado_prediccion'];
+                if ($estado !== 'CALCULADA' || $inscripcion->estado === 'CANCELADA'
+                    || $features['total_sesiones'] < 3 || $features['evaluaciones_rendidas'] < 1
+                    || $features['promedio_calificaciones'] === null) {
+                    $omitidas[] = $inscripcion->id;
+                    continue;
+                }
+                try {
+                    $this->validarPrediccionMl($item, $inscripcion->id);
+                } catch (\UnexpectedValueException $e) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'resultados' => 'Score, nivel o contrato ML incompatible para inscripcion ' . $inscripcion->id,
+                    ]);
+                }
+                $modelo = VersionModelo::firstOrCreate(
+                    ['version' => $item['version_modelo']],
+                    ['nombre' => 'FastAPI - ' . $item['version_modelo'],
+                     'algoritmo' => 'Random Forest (scikit-learn)', 'accuracy' => 0, 'f1_score' => 0,
+                     'fecha_entrenamiento' => now()->toDateString(),
+                     'url_endpoint' => rtrim(config('services.ml.url'), '/') . '/api/v1/predict',
+                     'activo' => false,
+                     'descripcion' => 'Version recibida de FastAPI. Fecha de registro; metricas 0 son marcadores sin validacion real.']);
+                $features['origen_ejecucion'] = 'N8N_AUTO';
+                $features['prediccion_ml'] = array_intersect_key($item, array_flip([
+                    'version_modelo', 'experimental', 'entrenado_con', 'estimacion_reprobo_pct',
+                    'estimacion_abandono_pct', 'requiere_seguimiento_por_pausa', 'aviso',
+                ]));
+                $features['prediccion_ml']['proveedor'] = 'ML_API';
+                $alerta = AlertaSeguimiento::where('inscripcion_id', $inscripcion->id)
+                    ->orderByDesc('id')->lockForUpdate()->first();
+                $estadoAlerta = $alerta?->estado ?? 'PENDIENTE';
+                if ($estadoAlerta === 'DESCARTADA' && $item['nivel_riesgo'] === 'ALTO') {
+                    $estadoAlerta = 'PENDIENTE';
+                }
+                $datos = [
+                    'version_modelo_id' => $modelo->id, 'nivel_riesgo' => $item['nivel_riesgo'],
+                    'score_riesgo' => round((float) $item['score_riesgo'], 2),
+                    'factores_riesgo' => $item['factores_riesgo'], 'metricas_base' => $features,
+                    'resumen_explicativo' => $item['resumen_explicativo'],
+                    'estado' => $estadoAlerta, 'origen' => 'N8N_AUTO', 'fecha_analisis' => now(),
+                ];
+                if ($alerta) {
+                    $alerta->update($datos);
+                } else {
+                    $alerta = AlertaSeguimiento::create(['inscripcion_id' => $inscripcion->id] + $datos);
+                }
+                $ids[] = $alerta->id;
+            }
+            return ['procesadas' => count($ids), 'omitidas' => count($omitidas),
+                    'alerta_ids' => $ids, 'inscripciones_omitidas' => $omitidas,
+                    'origen' => 'N8N_AUTO'];
+        });
+    }
+

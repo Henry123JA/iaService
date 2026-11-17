@@ -1,0 +1,24 @@
+name: scala-automation
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:2.47.3
+    container_name: scala-n8n
+    restart: "no"
+    ports:
+      - "127.0.0.1:5678:5678"
+    environment:
+      GENERIC_TIMEZONE: America/La_Paz
+      TZ: America/La_Paz
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+      N8N_SECURE_COOKIE: "false"
+      N8N_DIAGNOSTICS_ENABLED: "false"
+      N8N_PERSONALIZATION_ENABLED: "false"
+      N8N_VERSION_NOTIFICATIONS_ENABLED: "false"
+      EXECUTIONS_DATA_SAVE_ON_SUCCESS: none
+      EXECUTIONS_DATA_SAVE_ON_ERROR: none
+      EXECUTIONS_DATA_SAVE_MANUAL_EXECUTIONS: "false"
+    volumes:
+      - scala_n8n_data:/home/node/.n8n
+      - ./workflows:/workflows:ro
+volumes:
+  scala_n8n_data:

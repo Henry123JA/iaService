@@ -1,0 +1,18 @@
+[Unit]
+Description=Scala Musical - Microservicio IA/ML (FastAPI)
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=www-data
+WorkingDirectory=/var/www/iaService
+Environment="PATH=/var/www/iaService/.venv/bin"
+Environment="ML_MODEL_PATH=/var/www/iaService/models/modelos_demo.joblib"
+ExecStart=/var/www/iaService/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8001 --workers 1
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+
